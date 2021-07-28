@@ -42,30 +42,26 @@
 
 ;;;###autoload
 (defmacro prime* (parent first-call key func &optional name* &rest args)
-    (let* ((name (if (stringp name*) name* (if (symbolp func) (symbol-name func) nil)))
-            (keys (split-string key " "))
-            (one-key (= (length keys) 1))
-            (two-key (= (length keys) 2))
-            (carkeys (car keys))
-            (spare-keys (cadr keys))
-            (current-parent (if parent
-                                (concat parent " " (deino--replace-key carkeys))
-                                (deino--replace-key carkeys)))
-            (prime-name (if one-key name (prime--construct-name current-parent)))
-            (prime-body (if one-key func (intern (concat prime-name "/body"))))
-            (prime-body-plus (unless one-key (fboundp prime-body)))
-            (next-prime-key (string-join (cdr keys) " "))
-            (next-parent (concat current-parent " " (deino--replace-key spare-keys)))
-            (next-prime-name (if two-key name (s-chop-suffix "-" (prime--construct-name next-parent))))
-            (next-deino-body (if two-key func (intern (concat next-prime-name "/body"))))
-            (next-deino-settings (when two-key args)))
-        (when first-call (eval `(defdeino+ superman-prime nil (,carkeys ,prime-body ,prime-name))))
-        (unless one-key
-            (eval `(prime* ,current-parent nil ,next-prime-key ,func ,name* ,@args))
-            `(,(intern (concat "defdeino" (when prime-body-plus "+")))
-                ,(intern prime-name)
-                ,@(unless prime-body-plus '((:color blue) nil ("`" nil "cancel")))
-                (,spare-keys ,next-deino-body ,next-prime-name)))))
+    (let* ((ds (deino--create-dataset
+                (if (stringp name*) name* (if (symbolp func) (symbol-name func) nil))
+                key
+                parent
+                func
+                #'prime--construct-name))
+
+            (next-key (string-join (cdr (d--g ds :keys)) " "))
+            (next-deino-body (if (d--g ds :two-key) func (intern (concat (d--g ds :next-name) "/body"))))
+            (next-deino-settings (when (d--g ds :two-key) args)))
+        (when first-call (eval `(defdeino+ superman-prime nil
+                                    (,(d--g ds :carkeys)
+                                        ,(d--g ds :current-body)
+                                        ,(d--g ds :current-name)))))
+        (unless (d--g ds :one-key)
+            (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
+            `(,(intern (concat "defdeino" (when (d--g ds :current-body-plus) "+")))
+                ,(intern (d--g ds :current-name))
+                ,@(unless (d--g ds :current-body-plus) '((:color blue) nil ("`" nil "cancel")))
+                (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name))))))
 
 ;;;###autoload
 (defmacro prime (key func &optional name &rest args) `(prime* nil t ,key ,func ,name ,@args))
