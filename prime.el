@@ -25,10 +25,13 @@
 
 ;;; Code:
 
+(require 'alloy)
 (require 'deino)
 (require 's)
 
-(defdeino superman-prime (:color blue) "j" ("`" nil "cancel"))
+(defvar primus-key ",")
+(eval `(defdeino primus (:color blue) "j" ("`" nil "cancel")))
+(eval `(alloy-def :keymaps demon-run (alloy-chord ,(s-repeat 2 primus-key)) 'primus/body))
 
 (defun prime--replace-spaces (str) (s-replace " " "/" str))
 (defun prime--construct-name (str) (prime--replace-spaces (concat "prime/" str)))
@@ -45,10 +48,9 @@
             (next-key (string-join (cdr (d--g ds :keys)) " "))
             (next-deino-body (if (d--g ds :two-key) func (intern (concat (d--g ds :next-name) "/body"))))
             (next-deino-settings (when (d--g ds :two-key) args)))
-        (when first-call (eval `(defdeino+ superman-prime nil
-                                    (,(d--g ds :carkeys)
-                                        ,(d--g ds :current-body)
-                                        ,(d--g ds :current-name)))))
+        (when first-call (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
+                                                                ,(d--g ds :current-body)
+                                                                ,(d--g ds :current-name)))))
         (unless (d--g ds :one-key)
             (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
             `(,(intern (concat "defdeino" (when (d--g ds :current-body-plus) "+")))
@@ -56,8 +58,79 @@
                 ,@(unless (d--g ds :current-body-plus) '((:color blue) nil ("`" nil "cancel")))
                 (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name))))))
 
+(defun prime--construct-name+ (keys) (deino--construct-name+ keys prime--construct-name))
+
+;;;###autoload
+(defun prime+ (&rest args) (eval `(defdeino+ primus ,@args)))
+
+;;;###autoload
+(defun primer+ (key &rest args)
+    (eval `(defdeino+ primus nil (,key
+                                    ,(intern (concat (prime--construct-name key) "/body")
+                                    ,@args)))))
+
+;;;###autoload
+(defun primer++ (key &rest args) (deino--nested-rename key #'prime--construct-name+ args))
+
 ;;;###autoload
 (defmacro prime (key func &optional name &rest args) `(prime* nil t ,key ,func ,name ,@args))
+
+;; Adapted From: https://github.com/noctuid/general.el/blob/master/general.el#L2708
+;;;###autoload
+(defun use-package-handler/:prime (name _keyword arglists rest state)
+"Use-package handler for :prime."
+(use-package-concat
+    (use-package-process-keywords name rest state)
+    `(,@(mapcar (lambda (arglist) arglist `(prime ,@arglist)) arglists))))
+
+;;;###autoload
+(defalias 'use-package-autoloads/:prime #'use-package-autoloads/:ghook)
+;;;###autoload
+(defalias 'use-package-normalize/:prime #'use-package-normalize/:ghook)
+
+(add-to-list 'use-package-keywords :prime t)
+
+;;;###autoload
+(defun use-package-handler/:prime+ (name _keyword arglists rest state)
+"Use-package handler for :prime+."
+(use-package-concat
+    (use-package-process-keywords name rest state)
+    `(,@(mapcar (lambda (arglist) arglist `(prime+ ,@arglist)) arglists))))
+
+;;;###autoload
+(defalias 'use-package-autoloads/:prime+ #'use-package-autoloads/:ghook)
+;;;###autoload
+(defalias 'use-package-normalize/:prime+ #'use-package-normalize/:ghook)
+
+(add-to-list 'use-package-keywords :prime+ t)
+
+;;;###autoload
+(defun use-package-handler/:primer+ (name _keyword arglists rest state)
+"Use-package handler for :primer+."
+(use-package-concat
+    (use-package-process-keywords name rest state)
+    `(,@(mapcar (lambda (arglist) arglist `(primer+ ,@arglist)) arglists))))
+
+;;;###autoload
+(defalias 'use-package-autoloads/:primer+ #'use-package-autoloads/:ghook)
+;;;###autoload
+(defalias 'use-package-normalize/:primer+ #'use-package-normalize/:ghook)
+
+(add-to-list 'use-package-keywords :primer+ t)
+
+;;;###autoload
+(defun use-package-handler/:primer++ (name _keyword arglists rest state)
+"Use-package handler for :primer++."
+(use-package-concat
+    (use-package-process-keywords name rest state)
+    `(,@(mapcar (lambda (arglist) arglist `(primer++ ,@arglist)) arglists))))
+
+;;;###autoload
+(defalias 'use-package-autoloads/:primer++ #'use-package-autoloads/:ghook)
+;;;###autoload
+(defalias 'use-package-normalize/:primer++ #'use-package-normalize/:ghook)
+
+(add-to-list 'use-package-keywords :primer++ t)
 
 (provide 'prime)
 ;;; prime.el ends here
