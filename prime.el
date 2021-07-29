@@ -53,12 +53,15 @@
                                                                 ,(d--g ds :current-name)))))
         (unless (d--g ds :one-key)
             (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
-            `(,(intern (concat "defdeino" (when (d--g ds :current-body-plus) "+")))
+            `(,(intern (concat "defdeino" (if (d--g ds :current-body-plus) "+" "")))
                 ,(intern (d--g ds :current-name))
-                ,@(unless (d--g ds :current-body-plus) '((:color blue) nil ("`" nil "cancel")))
-                (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name))))))
+                ,@(if (d--g ds :current-body-plus) (list nil) '((:color blue) nil ("`" nil "cancel")))
+                (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name) ,@next-deino-settings)))))
 
 (defun prime--construct-name+ (keys) (deino--construct-name+ keys prime--construct-name))
+
+;;;###autoload
+(defmacro prime (key func &optional name &rest args) `(prime* nil t ,key ,func ,name ,@args))
 
 ;;;###autoload
 (defun prime+ (&rest args) (eval `(defdeino+ primus ,@args)))
@@ -66,69 +69,63 @@
 ;;;###autoload
 (defun primer+ (key &rest args)
     (eval `(defdeino+ primus nil (,key
-                                    ,(intern (concat (prime--construct-name key) "/body")
-                                    ,@args)))))
+                                    ,(intern (concat (prime--construct-name key) "/body"))
+                                    ,@args))))
 
 ;;;###autoload
 (defun primer++ (key &rest args) (deino--nested-rename key #'prime--construct-name+ args))
 
-;;;###autoload
-(defmacro prime (key func &optional name &rest args) `(prime* nil t ,key ,func ,name ,@args))
-
-;; Adapted From: https://github.com/noctuid/general.el/blob/master/general.el#L2708
-;;;###autoload
-(defun use-package-handler/:prime (name _keyword arglists rest state)
-"Use-package handler for :prime."
-(use-package-concat
-    (use-package-process-keywords name rest state)
-    `(,@(mapcar (lambda (arglist) arglist `(prime ,@arglist)) arglists))))
+;; Primarily adapted from https://gitlab.com/to1ne/use-package-hydra/-/blob/master/use-package-hydra.el
 
 ;;;###autoload
-(defalias 'use-package-autoloads/:prime #'use-package-autoloads/:ghook)
+(defalias 'use-package-normalize/:prime 'use-package-normalize-forms)
+
 ;;;###autoload
-(defalias 'use-package-normalize/:prime #'use-package-normalize/:ghook)
+(defun use-package-handler/:prime (name keyword args rest state)
+  "Generate prime with NAME for `:prime' KEYWORD.
+ARGS, REST, and STATE are prepared by `use-package-normalize/:prime'."
+  (use-package-concat
+   (mapcar #'(lambda (def) `(prime ,@def)) args)
+   (use-package-process-keywords name rest state)))
 
 (add-to-list 'use-package-keywords :prime t)
 
 ;;;###autoload
-(defun use-package-handler/:prime+ (name _keyword arglists rest state)
-"Use-package handler for :prime+."
-(use-package-concat
-    (use-package-process-keywords name rest state)
-    `(,@(mapcar (lambda (arglist) arglist `(prime+ ,@arglist)) arglists))))
+(defalias 'use-package-normalize/:prime+ 'use-package-normalize-forms)
 
 ;;;###autoload
-(defalias 'use-package-autoloads/:prime+ #'use-package-autoloads/:ghook)
-;;;###autoload
-(defalias 'use-package-normalize/:prime+ #'use-package-normalize/:ghook)
+(defun use-package-handler/:prime+ (name keyword args rest state)
+  "Generate prime+ with NAME for `:prime+' KEYWORD.
+ARGS, REST, and STATE are prepared by `use-package-normalize/:prime+'."
+  (use-package-concat
+   (mapcar #'(lambda (def) `(prime+ ,@def)) args)
+   (use-package-process-keywords name rest state)))
 
 (add-to-list 'use-package-keywords :prime+ t)
 
 ;;;###autoload
-(defun use-package-handler/:primer+ (name _keyword arglists rest state)
-"Use-package handler for :primer+."
-(use-package-concat
-    (use-package-process-keywords name rest state)
-    `(,@(mapcar (lambda (arglist) arglist `(primer+ ,@arglist)) arglists))))
+(defalias 'use-package-normalize/:primer+ 'use-package-normalize-forms)
 
 ;;;###autoload
-(defalias 'use-package-autoloads/:primer+ #'use-package-autoloads/:ghook)
-;;;###autoload
-(defalias 'use-package-normalize/:primer+ #'use-package-normalize/:ghook)
+(defun use-package-handler/:primer+ (name keyword args rest state)
+  "Generate primer+ with NAME for `:primer+' KEYWORD.
+ARGS, REST, and STATE are prepared by `use-package-normalize/:primer+'."
+  (use-package-concat
+   (mapcar #'(lambda (def) `(primer+ ,@def)) args)
+   (use-package-process-keywords name rest state)))
 
 (add-to-list 'use-package-keywords :primer+ t)
 
 ;;;###autoload
-(defun use-package-handler/:primer++ (name _keyword arglists rest state)
-"Use-package handler for :primer++."
-(use-package-concat
-    (use-package-process-keywords name rest state)
-    `(,@(mapcar (lambda (arglist) arglist `(primer++ ,@arglist)) arglists))))
+(defalias 'use-package-normalize/:primer++ 'use-package-normalize-forms)
 
 ;;;###autoload
-(defalias 'use-package-autoloads/:primer++ #'use-package-autoloads/:ghook)
-;;;###autoload
-(defalias 'use-package-normalize/:primer++ #'use-package-normalize/:ghook)
+(defun use-package-handler/:primer++ (name keyword args rest state)
+  "Generate primer++ with NAME for `:primer++' KEYWORD.
+ARGS, REST, and STATE are prepared by `use-package-normalize/:primer++'."
+  (use-package-concat
+   (mapcar #'(lambda (def) `(primer++ ,@def)) args)
+   (use-package-process-keywords name rest state)))
 
 (add-to-list 'use-package-keywords :primer++ t)
 
