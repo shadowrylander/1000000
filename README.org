@@ -53,14 +53,14 @@
                 #'prime--construct-name))
 
             (next-key (string-join (cdr (d--g ds :keys)) " "))
-            (next-deino-body (if (d--g ds :two-key) func (intern (concat (d--g ds :next-name) "/body"))))
+            (next-deino-body (if (d--g ds :two-key) func (meq/inconcat (d--g ds :next-name) "/body")))
             (next-deino-settings (when (d--g ds :two-key) args)))
         (when first-call (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
                                                                 ,(d--g ds :current-body)
                                                                 ,(d--g ds :current-name)))))
         (unless (d--g ds :one-key)
             (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
-            `(,(intern (concat "defdeino" (if (d--g ds :current-body-plus) "+" "")))
+            `(,(meq/inconcat "defdeino" (if (d--g ds :current-body-plus) "+" ""))
                 ,(intern (d--g ds :current-name))
                 ,@(if (d--g ds :current-body-plus) (list nil) '((:color blue) nil ("`" nil "cancel")))
                 (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name) ,@next-deino-settings)))))
@@ -76,7 +76,7 @@
 ;;;###autoload
 (defun primer+ (key &rest args)
     (eval `(defdeino+ primus nil (,key
-                                    ,(intern (concat (prime--construct-name key) "/body"))
+                                    ,(meq/inconcat (prime--construct-name key) "/body")
                                     ,@args))))
 
 ;;;###autoload
