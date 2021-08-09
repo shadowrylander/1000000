@@ -36,7 +36,6 @@
 (defun prime--replace-spaces (str) (s-replace " " "/" str))
 (defun prime--construct-name (str) (prime--replace-spaces (concat "prime/" str)))
 
-;;;###autoload
 (defmacro prime* (parent first-call key func &optional name* &rest args)
     (let* ((ds (deino--create-dataset
                 (if (stringp name*) name* (if (symbolp func) (symbol-name func) nil))
@@ -49,8 +48,8 @@
             (next-deino-body (if (d--g ds :two-key) func (meq/inconcat (d--g ds :next-name) "/body")))
             (next-deino-settings (when (d--g ds :two-key) args)))
         (when first-call (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
-                                                                ,(d--g ds :current-body)
-                                                                ,(d--g ds :current-name)))))
+                                                        ,(d--g ds :current-body)
+                                                        ,(d--g ds :current-name)))))
         (unless (d--g ds :one-key)
             (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
             `(,(meq/inconcat "defdeino" (if (d--g ds :current-body-plus) "+" ""))
