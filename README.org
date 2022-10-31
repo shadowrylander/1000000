@@ -47,7 +47,7 @@
                 func
                 #'prime--construct-name))
 
-            (next-key (string-join (cdr (d--g ds :keys)) " "))
+            (next-key (s-join " " (cdr (d--g ds :keys))))
             (next-deino-body (if (d--g ds :two-key) func (meq/inconcat (d--g ds :next-name) "/body")))
             (next-deino-settings (when (d--g ds :two-key) args)))
         (when first-call (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
