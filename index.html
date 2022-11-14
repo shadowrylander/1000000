@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-11-14 Mon 10:26 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Jeet Ray" />
+<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/settings/main/src/styles/primary/syvl.css" />
+<link rel="icon" href="https://combinatronics.io/sylvorg/settings/main/src/icons/favicons/shiny-zigzagoon-galar.ico" sizes="any" />
+<link rel="icon" href="https://combinatronics.io/sylvorg/settings/main/src/icons/favicons/shiny-zigzagoon-galar.svg" />
+<link rel="manifest" href="https://combinatronics.io/sylvorg/settings/main/manifest.json" />
+<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/settings/main/src/styles/highlight/paraiso-dark.min.css" />
+<script src="https://combinatronics.io/sylvorg/settings/main/src/scripts/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<div class="header">
+<h1>We Are Syvlorg.</h1>
+<a href="">About Me</a>
+<a href="">About This Website</a>
+<a href="">About Syvlorg</a>
+<a href="https://resume.syvl.org">Résumé</a>
+<a href="https://index.syvl.org">Index</a>
+</div>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgfe003d1">prime.el</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfe003d1" class="outline-2">
+<h2 id="orgfe003d1">prime.el</h2>
+<div class="outline-text-2" id="text-orgfe003d1">
+<div class="org-src-container">
+<pre><code class="language-lisp match-braces rainbow-braces">;;; prime.el --- a simple package                     -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2021  Jeet Ray
+
+;; Author: Jeet Ray &lt;aiern@protonmail.com&gt;
+;; Keywords: lisp
+;; Version: 0.0.1
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+
+;;; Commentary:
+
+;; Put a description of the package here
+
+;;; Code:
+
+(require 'alloy)
+(require 'deino)
+(require 's)
+
+(defvar primus-key ",")
+(eval `(defdeino primus (:color blue) "j" ("`" nil "cancel")))
+(eval `(alloy-def :keymaps demon-run (alloy-chord ,(s-repeat 2 primus-key)) 'primus/body))
+
+(defun prime--replace-spaces (str) (s-replace " " "/" str))
+(defun prime--construct-name (str) (prime--replace-spaces (concat "prime/" str)))
+
+(defmacro prime* (parent first-call key func &amp;optional name* &amp;rest args)
+    (let* ((ds (deino--create-dataset
+                (if (stringp name*) name* (if (symbolp func) (symbol-name func) nil))
+                key
+                parent
+                func
+                #'prime--construct-name))
+
+            (next-key (s-join " " (cdr (d--g ds :keys))))
+            (next-deino-body (if (d--g ds :two-key) func (meq/inconcat (d--g ds :next-name) "/body")))
+            (next-deino-settings (when (d--g ds :two-key) args)))
+        (when first-call (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
+                                                        ,(d--g ds :current-body)
+                                                        ,(d--g ds :current-name)))))
+        (unless (d--g ds :one-key)
+            (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
+            `(,(meq/inconcat "defdeino" (if (d--g ds :current-body-plus) "+" ""))
+                ,(intern (d--g ds :current-name))
+                ,@(if (d--g ds :current-body-plus) (list nil) '((:color blue) nil ("`" nil "cancel")))
+                (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name) ,@next-deino-settings)))))
+
+(defun prime--construct-name+ (keys) (deino--construct-name+ keys prime--construct-name))
+
+;;;###autoload
+(defmacro prime (key func &amp;optional name &amp;rest args) `(prime* nil t ,key ,func ,name ,@args))
+
+;;;###autoload
+(defun prime+ (&amp;rest args) (eval `(defdeino+ primus ,@args)))
+
+;;;###autoload
+(defun primer+ (key &amp;rest args)
+    (eval `(defdeino+ primus nil (,key
+                                    ,(meq/inconcat (prime--construct-name key) "/body")
+                                    ,@args))))
+
+;;;###autoload
+(defun primer++ (key &amp;rest args) (deino--nested-rename key #'prime--construct-name+ args))
+
+(with-eval-after-load 'use-package
+  ;; Primarily adapted from https://gitlab.com/to1ne/use-package-hydra/-/blob/master/use-package-hydra.el
+
+  ;;;###autoload
+  (defalias 'use-package-normalize/:prime 'use-package-normalize-forms)
+
+  ;;;###autoload
+  (defun use-package-handler/:prime (name keyword args rest state)
+    "Generate prime with NAME for `:prime' KEYWORD.
+  ARGS, REST, and STATE are prepared by `use-package-normalize/:prime'."
+    (use-package-concat
+    (mapcar #'(lambda (def) `(prime ,@def)) args)
+    (use-package-process-keywords name rest state)))
+
+  (add-to-list 'use-package-keywords :prime t)
+
+  ;;;###autoload
+  (defalias 'use-package-normalize/:prime+ 'use-package-normalize-forms)
+
+  ;;;###autoload
+  (defun use-package-handler/:prime+ (name keyword args rest state)
+    "Generate prime+ with NAME for `:prime+' KEYWORD.
+  ARGS, REST, and STATE are prepared by `use-package-normalize/:prime+'."
+    (use-package-concat
+    (mapcar #'(lambda (def) `(prime+ ,@def)) args)
+    (use-package-process-keywords name rest state)))
+
+  (add-to-list 'use-package-keywords :prime+ t)
+
+  ;;;###autoload
+  (defalias 'use-package-normalize/:primer+ 'use-package-normalize-forms)
+
+  ;;;###autoload
+  (defun use-package-handler/:primer+ (name keyword args rest state)
+    "Generate primer+ with NAME for `:primer+' KEYWORD.
+  ARGS, REST, and STATE are prepared by `use-package-normalize/:primer+'."
+    (use-package-concat
+    (mapcar #'(lambda (def) `(primer+ ,@def)) args)
+    (use-package-process-keywords name rest state)))
+
+  (add-to-list 'use-package-keywords :primer+ t)
+
+  ;;;###autoload
+  (defalias 'use-package-normalize/:primer++ 'use-package-normalize-forms)
+
+  ;;;###autoload
+  (defun use-package-handler/:primer++ (name keyword args rest state)
+    "Generate primer++ with NAME for `:primer++' KEYWORD.
+  ARGS, REST, and STATE are prepared by `use-package-normalize/:primer++'."
+    (use-package-concat
+    (mapcar #'(lambda (def) `(primer++ ,@def)) args)
+    (use-package-process-keywords name rest state)))
+
+  (add-to-list 'use-package-keywords :primer++ t))
+
+(provide 'prime)
+;;; prime.el ends here
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Jeet Ray</p>
+<p class="date">Created: 2022-11-14 Mon 10:26</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
