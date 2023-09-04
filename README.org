@@ -45,22 +45,29 @@
                 key
                 parent
                 func
-                #'prime--construct-name))
+                #'prime--construct-name+))
 
             (next-key (s-join " " (cdr (d--g ds :keys))))
             (next-deino-body (if (d--g ds :two-key) func (meq/inconcat (d--g ds :next-name) "/body")))
             (next-deino-settings (when (d--g ds :two-key) args)))
-        (when first-call (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
-                                                        ,(d--g ds :current-body)
-                                                        ,(d--g ds :current-name)))))
+        (when first-call
+            (unless (d--g ds :current-body-plus)
+                (eval `(defdeino ,(intern (d--g ds :current-name)) (:color blue) nil ("`" nil "cancel"))))
+            (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
+                                          ,(d--g ds :current-body)
+                                          ,(d--g ds :current-name)))))
         (unless (d--g ds :one-key)
             (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
             `(,(meq/inconcat "defdeino" (if (d--g ds :current-body-plus) "+" ""))
                 ,(intern (d--g ds :current-name))
-                ,@(if (d--g ds :current-body-plus) (list nil) '((:color blue) nil ("`" nil "cancel")))
+                ,@(if (d--g ds :current-body-plus)
+                    (list nil)
+                    `((:color blue) nil
+                        ("`" nil "cancel")
+                        ("DEL" ,(if first-call #'primus/body (meq/inconcat (prime--construct-name parent) "/body")) "back")))
                 (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name) ,@next-deino-settings)))))
 
-(defun prime--construct-name+ (keys) (deino--construct-name+ keys prime--construct-name))
+(defun prime--construct-name+ (keys &optional delimiter) (deino--construct-name+ keys #'prime--construct-name delimiter))
 
 ;;;###autoload
 (defmacro prime (key func &optional name &rest args) `(prime* nil t ,key ,func ,name ,@args))
@@ -69,13 +76,16 @@
 (defun prime+ (&rest args) (eval `(defdeino+ primus ,@args)))
 
 ;;;###autoload
-(defun primer+ (key &rest args)
-    (eval `(defdeino+ primus nil (,key
-                                    ,(meq/inconcat (prime--construct-name key) "/body")
-                                    ,@args))))
+(defun primer (key &rest args)
+    (add-hook
+        'window-setup-hook
+        #'(lambda nil (eval `(defdeino+ primus nil (,key ,(meq/inconcat (prime--construct-name+ key) "/body") ,@args))))))
 
 ;;;###autoload
-(defun primer++ (key &rest args) (deino--nested-rename key #'prime--construct-name+ args))
+(defun primer+ (key &optional delimiter &rest args) (deino--nested-rename key #'prime--construct-name+ args))
+
+;;;###autoload
+(defun primed (key description &optional delimiter) (deino--nested-describe key #'prime--construct-name+ description delimiter))
 
 (with-eval-after-load 'use-package
   ;; Primarily adapted from https://gitlab.com/to1ne/use-package-hydra/-/blob/master/use-package-hydra.el
@@ -107,6 +117,32 @@
   (add-to-list 'use-package-keywords :prime+ t)
 
   ;;;###autoload
+  (defalias 'use-package-normalize/:primer 'use-package-normalize-forms)
+
+  ;;;###autoload
+  (defun use-package-handler/:primer (name keyword args rest state)
+    "Generate primer with NAME for `:primer' KEYWORD.
+  ARGS, REST, and STATE are prepared by `use-package-normalize/:primer'."
+    (use-package-concat
+    (mapcar #'(lambda (def) `(primer ,@def)) args)
+    (use-package-process-keywords name rest state)))
+
+  (add-to-list 'use-package-keywords :primer t)
+
+  ;;;###autoload
+  (defalias 'use-package-normalize/:primed 'use-package-normalize-forms)
+
+  ;;;###autoload
+  (defun use-package-handler/:primed (name keyword args rest state)
+    "Generate primed with NAME for `:primed' KEYWORD.
+  ARGS, REST, and STATE are prepared by `use-package-normalize/:primed'."
+    (use-package-concat
+    (mapcar #'(lambda (def) `(primed ,@def)) args)
+    (use-package-process-keywords name rest state)))
+
+  (add-to-list 'use-package-keywords :primed t)
+
+  ;;;###autoload
   (defalias 'use-package-normalize/:primer+ 'use-package-normalize-forms)
 
   ;;;###autoload
@@ -117,20 +153,7 @@
     (mapcar #'(lambda (def) `(primer+ ,@def)) args)
     (use-package-process-keywords name rest state)))
 
-  (add-to-list 'use-package-keywords :primer+ t)
-
-  ;;;###autoload
-  (defalias 'use-package-normalize/:primer++ 'use-package-normalize-forms)
-
-  ;;;###autoload
-  (defun use-package-handler/:primer++ (name keyword args rest state)
-    "Generate primer++ with NAME for `:primer++' KEYWORD.
-  ARGS, REST, and STATE are prepared by `use-package-normalize/:primer++'."
-    (use-package-concat
-    (mapcar #'(lambda (def) `(primer++ ,@def)) args)
-    (use-package-process-keywords name rest state)))
-
-  (add-to-list 'use-package-keywords :primer++ t))
+  (add-to-list 'use-package-keywords :primer+ t))
 
 (provide 'prime)
 ;;; prime.el ends here

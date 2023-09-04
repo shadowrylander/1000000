@@ -3,18 +3,18 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-11-14 Mon 10:26 -->
+<!-- 2023-09-04 Mon 12:28 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
-<meta name="generator" content="Org mode" />
 <meta name="author" content="Jeet Ray" />
-<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/settings/main/src/styles/primary/syvl.css" />
-<link rel="icon" href="https://combinatronics.io/sylvorg/settings/main/src/icons/favicons/shiny-zigzagoon-galar.ico" sizes="any" />
-<link rel="icon" href="https://combinatronics.io/sylvorg/settings/main/src/icons/favicons/shiny-zigzagoon-galar.svg" />
-<link rel="manifest" href="https://combinatronics.io/sylvorg/settings/main/manifest.json" />
-<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/settings/main/src/styles/highlight/paraiso-dark.min.css" />
-<script src="https://combinatronics.io/sylvorg/settings/main/src/scripts/highlight/highlight.min.js"></script>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/bundle/main/src/styles/primary/syvl.css" />
+<link rel="icon" href="https://combinatronics.io/sylvorg/bundle/main/src/icons/favicons/shiny-zigzagoon-galar.ico" sizes="any" />
+<link rel="icon" href="https://combinatronics.io/sylvorg/bundle/main/src/icons/favicons/shiny-zigzagoon-galar.svg" />
+<link rel="manifest" href="https://combinatronics.io/sylvorg/bundle/main/manifest.json" />
+<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/bundle/main/src/styles/highlight/paraiso-dark.min.css" />
+<script src="https://combinatronics.io/sylvorg/bundle/main/src/scripts/highlight/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
 <div class="header">
 <h1>We Are Syvlorg.</h1>
@@ -24,177 +24,178 @@
 <a href="https://resume.syvl.org">Résumé</a>
 <a href="https://index.syvl.org">Index</a>
 </div>
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
-<div id="content">
-<div id="table-of-contents">
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgfe003d1">prime.el</a></li>
+<li><a href="#org571579c">prime.el</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgfe003d1" class="outline-2">
-<h2 id="orgfe003d1">prime.el</h2>
-<div class="outline-text-2" id="text-orgfe003d1">
+<div id="outline-container-org571579c" class="outline-2">
+<h2 id="org571579c">prime.el</h2>
+<div class="outline-text-2" id="text-org571579c">
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces">;;; prime.el --- a simple package                     -*- lexical-binding: t; -*-
+<pre><code class="language-lisp match-braces rainbow-braces"><span style="font-weight: bold; font-style: italic;">;;; </span><span style="font-weight: bold; font-style: italic;">prime.el --- a simple package                     -*- lexical-binding: t; -*-</span>
 
-;; Copyright (C) 2021  Jeet Ray
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Copyright (C) 2021  Jeet Ray</span>
 
-;; Author: Jeet Ray &lt;aiern@protonmail.com&gt;
-;; Keywords: lisp
-;; Version: 0.0.1
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Author: Jeet Ray <a href="mailto:aiern%40protonmail.com">&lt;aiern@protonmail.com&gt;</a></span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Keywords: lisp</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Version: 0.0.1</span>
 
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">This program is free software; you can redistribute it and/or modify</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">it under the terms of the GNU General Public License as published by</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">the Free Software Foundation, either version 3 of the License, or</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">(at your option) any later version.</span>
 
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">This program is distributed in the hope that it will be useful,</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">GNU General Public License for more details.</span>
 
-;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">You should have received a copy of the GNU General Public License</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">along with this program.  If not, see <a href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.</span>
 
-;;; Commentary:
+<span style="font-weight: bold; font-style: italic;">;;; </span><span style="font-weight: bold; font-style: italic;">Commentary:</span>
 
-;; Put a description of the package here
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Put a description of the package here</span>
 
-;;; Code:
+<span style="font-weight: bold; font-style: italic;">;;; </span><span style="font-weight: bold; font-style: italic;">Code:</span>
 
-(require 'alloy)
-(require 'deino)
-(require 's)
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">alloy</span>)
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">deino</span>)
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">s</span>)
 
-(defvar primus-key ",")
-(eval `(defdeino primus (:color blue) "j" ("`" nil "cancel")))
-(eval `(alloy-def :keymaps demon-run (alloy-chord ,(s-repeat 2 primus-key)) 'primus/body))
+(<span style="font-weight: bold;">defvar</span> <span style="font-weight: bold; font-style: italic;">primus-key</span> <span style="font-style: italic;">","</span>)
+(eval `(defdeino primus (<span style="font-weight: bold;">:color</span> blue) <span style="font-style: italic;">"j"</span> (<span style="font-style: italic;">"`"</span> nil <span style="font-style: italic;">"cancel"</span>)))
+(eval `(alloy-def <span style="font-weight: bold;">:keymaps</span> demon-run (alloy-chord ,(s-repeat 2 primus-key)) 'primus/body))
 
-(defun prime--replace-spaces (str) (s-replace " " "/" str))
-(defun prime--construct-name (str) (prime--replace-spaces (concat "prime/" str)))
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">prime--replace-spaces</span> (str) (s-replace <span style="font-style: italic;">" "</span> <span style="font-style: italic;">"/"</span> str))
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">prime--construct-name</span> (str) (prime--replace-spaces (concat <span style="font-style: italic;">"prime/"</span> str)))
 
-(defmacro prime* (parent first-call key func &amp;optional name* &amp;rest args)
-    (let* ((ds (deino--create-dataset
-                (if (stringp name*) name* (if (symbolp func) (symbol-name func) nil))
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">prime*</span> (parent first-call key func <span style="font-weight: bold; text-decoration: underline;">&amp;optional</span> name* <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args)
+    (<span style="font-weight: bold;">let*</span> ((ds (deino--create-dataset
+                (<span style="font-weight: bold;">if</span> (stringp name*) name* (<span style="font-weight: bold;">if</span> (symbolp func) (symbol-name func) nil))
                 key
                 parent
                 func
-                #'prime--construct-name))
+                #'prime--construct-name+))
 
-            (next-key (s-join " " (cdr (d--g ds :keys))))
-            (next-deino-body (if (d--g ds :two-key) func (meq/inconcat (d--g ds :next-name) "/body")))
-            (next-deino-settings (when (d--g ds :two-key) args)))
-        (when first-call (eval `(defdeino+ primus nil (,(d--g ds :carkeys)
-                                                        ,(d--g ds :current-body)
-                                                        ,(d--g ds :current-name)))))
-        (unless (d--g ds :one-key)
-            (eval `(prime* ,(d--g ds :current-parent) nil ,next-key ,func ,name* ,@next-deino-settings))
-            `(,(meq/inconcat "defdeino" (if (d--g ds :current-body-plus) "+" ""))
-                ,(intern (d--g ds :current-name))
-                ,@(if (d--g ds :current-body-plus) (list nil) '((:color blue) nil ("`" nil "cancel")))
-                (,(d--g ds :spare-keys) ,next-deino-body ,(d--g ds :next-name) ,@next-deino-settings)))))
+            (next-key (s-join <span style="font-style: italic;">" "</span> (cdr (d--g ds <span style="font-weight: bold;">:keys</span>))))
+            (next-deino-body (<span style="font-weight: bold;">if</span> (d--g ds <span style="font-weight: bold;">:two-key</span>) func (meq/inconcat (d--g ds <span style="font-weight: bold;">:next-name</span>) <span style="font-style: italic;">"/body"</span>)))
+            (next-deino-settings (<span style="font-weight: bold;">when</span> (d--g ds <span style="font-weight: bold;">:two-key</span>) args)))
+        (<span style="font-weight: bold;">when</span> first-call
+            (<span style="font-weight: bold;">unless</span> (d--g ds <span style="font-weight: bold;">:current-body-plus</span>)
+                (eval `(defdeino ,(intern (d--g ds <span style="font-weight: bold;">:current-name</span>)) (<span style="font-weight: bold;">:color</span> blue) nil (<span style="font-style: italic;">"`"</span> nil <span style="font-style: italic;">"cancel"</span>))))
+            (eval `(defdeino+ primus nil (,(d--g ds <span style="font-weight: bold;">:carkeys</span>)
+                                          ,(d--g ds <span style="font-weight: bold;">:current-body</span>)
+                                          ,(d--g ds <span style="font-weight: bold;">:current-name</span>)))))
+        (<span style="font-weight: bold;">unless</span> (d--g ds <span style="font-weight: bold;">:one-key</span>)
+            (eval `(prime* ,(d--g ds <span style="font-weight: bold;">:current-parent</span>) nil ,next-key ,func ,name* ,@next-deino-settings))
+            `(,(meq/inconcat <span style="font-style: italic;">"defdeino"</span> (<span style="font-weight: bold;">if</span> (d--g ds <span style="font-weight: bold;">:current-body-plus</span>) <span style="font-style: italic;">"+"</span> <span style="font-style: italic;">""</span>))
+                ,(intern (d--g ds <span style="font-weight: bold;">:current-name</span>))
+                ,@(<span style="font-weight: bold;">if</span> (d--g ds <span style="font-weight: bold;">:current-body-plus</span>)
+                    (list nil)
+                    `((<span style="font-weight: bold;">:color</span> blue) nil
+                        (<span style="font-style: italic;">"`"</span> nil <span style="font-style: italic;">"cancel"</span>)
+                        (<span style="font-style: italic;">"DEL"</span> ,(<span style="font-weight: bold;">if</span> first-call #'primus/body (meq/inconcat (prime--construct-name parent) <span style="font-style: italic;">"/body"</span>)) <span style="font-style: italic;">"back"</span>)))
+                (,(d--g ds <span style="font-weight: bold;">:spare-keys</span>) ,next-deino-body ,(d--g ds <span style="font-weight: bold;">:next-name</span>) ,@next-deino-settings)))))
 
-(defun prime--construct-name+ (keys) (deino--construct-name+ keys prime--construct-name))
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">prime--construct-name+</span> (keys <span style="font-weight: bold; text-decoration: underline;">&amp;optional</span> delimiter) (deino--construct-name+ keys #'prime--construct-name delimiter))
 
-;;;###autoload
-(defmacro prime (key func &amp;optional name &amp;rest args) `(prime* nil t ,key ,func ,name ,@args))
+<span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">autoload</span>
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">prime</span> (key func <span style="font-weight: bold; text-decoration: underline;">&amp;optional</span> name <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args) `(prime* nil t ,key ,func ,name ,@args))
 
-;;;###autoload
-(defun prime+ (&amp;rest args) (eval `(defdeino+ primus ,@args)))
+<span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">autoload</span>
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">prime+</span> (<span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args) (eval `(defdeino+ primus ,@args)))
 
-;;;###autoload
-(defun primer+ (key &amp;rest args)
-    (eval `(defdeino+ primus nil (,key
-                                    ,(meq/inconcat (prime--construct-name key) "/body")
-                                    ,@args))))
+<span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">autoload</span>
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">primer</span> (key <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args)
+    (add-hook
+        'window-setup-hook
+        #'(<span style="font-weight: bold;">lambda</span> nil (eval `(defdeino+ primus nil (,key ,(meq/inconcat (prime--construct-name+ key) <span style="font-style: italic;">"/body"</span>) ,@args))))))
 
-;;;###autoload
-(defun primer++ (key &amp;rest args) (deino--nested-rename key #'prime--construct-name+ args))
+<span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">autoload</span>
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">primer+</span> (key <span style="font-weight: bold; text-decoration: underline;">&amp;optional</span> delimiter <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args) (deino--nested-rename key #'prime--construct-name+ args))
 
-(with-eval-after-load 'use-package
-  ;; Primarily adapted from https://gitlab.com/to1ne/use-package-hydra/-/blob/master/use-package-hydra.el
+<span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###</span><span style="font-weight: bold; font-style: italic;">autoload</span>
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">primed</span> (key description <span style="font-weight: bold; text-decoration: underline;">&amp;optional</span> delimiter) (deino--nested-describe key #'prime--construct-name+ description delimiter))
 
-  ;;;###autoload
-  (defalias 'use-package-normalize/:prime 'use-package-normalize-forms)
+(<span style="font-weight: bold;">with-eval-after-load</span> 'use-package
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Primarily adapted from https://gitlab.com/to1ne/use-package-hydra/-/blob/master/use-package-hydra.el</span>
 
-  ;;;###autoload
-  (defun use-package-handler/:prime (name keyword args rest state)
-    "Generate prime with NAME for `:prime' KEYWORD.
-  ARGS, REST, and STATE are prepared by `use-package-normalize/:prime'."
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defalias</span> '<span style="font-weight: bold;">use-package-normalize/:prime</span> 'use-package-normalize-forms)
+
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">use-package-handler/:prime</span> (name keyword args rest state)
+    <span style="font-style: italic;">"Generate prime with NAME for `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">:prime</span><span style="font-style: italic;">' KEYWORD.</span>
+<span style="font-style: italic;">  ARGS, REST, and STATE are prepared by `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">use-package-normalize/:prime</span><span style="font-style: italic;">'."</span>
     (use-package-concat
-    (mapcar #'(lambda (def) `(prime ,@def)) args)
+    (mapcar #'(<span style="font-weight: bold;">lambda</span> (def) `(prime ,@def)) args)
     (use-package-process-keywords name rest state)))
 
-  (add-to-list 'use-package-keywords :prime t)
+  (add-to-list 'use-package-keywords <span style="font-weight: bold;">:prime</span> t)
 
-  ;;;###autoload
-  (defalias 'use-package-normalize/:prime+ 'use-package-normalize-forms)
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defalias</span> '<span style="font-weight: bold;">use-package-normalize/:prime+</span> 'use-package-normalize-forms)
 
-  ;;;###autoload
-  (defun use-package-handler/:prime+ (name keyword args rest state)
-    "Generate prime+ with NAME for `:prime+' KEYWORD.
-  ARGS, REST, and STATE are prepared by `use-package-normalize/:prime+'."
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">use-package-handler/:prime+</span> (name keyword args rest state)
+    <span style="font-style: italic;">"Generate prime+ with NAME for `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">:prime+</span><span style="font-style: italic;">' KEYWORD.</span>
+<span style="font-style: italic;">  ARGS, REST, and STATE are prepared by `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">use-package-normalize/:prime+</span><span style="font-style: italic;">'."</span>
     (use-package-concat
-    (mapcar #'(lambda (def) `(prime+ ,@def)) args)
+    (mapcar #'(<span style="font-weight: bold;">lambda</span> (def) `(prime+ ,@def)) args)
     (use-package-process-keywords name rest state)))
 
-  (add-to-list 'use-package-keywords :prime+ t)
+  (add-to-list 'use-package-keywords <span style="font-weight: bold;">:prime+</span> t)
 
-  ;;;###autoload
-  (defalias 'use-package-normalize/:primer+ 'use-package-normalize-forms)
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defalias</span> '<span style="font-weight: bold;">use-package-normalize/:primer</span> 'use-package-normalize-forms)
 
-  ;;;###autoload
-  (defun use-package-handler/:primer+ (name keyword args rest state)
-    "Generate primer+ with NAME for `:primer+' KEYWORD.
-  ARGS, REST, and STATE are prepared by `use-package-normalize/:primer+'."
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">use-package-handler/:primer</span> (name keyword args rest state)
+    <span style="font-style: italic;">"Generate primer with NAME for `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">:primer</span><span style="font-style: italic;">' KEYWORD.</span>
+<span style="font-style: italic;">  ARGS, REST, and STATE are prepared by `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">use-package-normalize/:primer</span><span style="font-style: italic;">'."</span>
     (use-package-concat
-    (mapcar #'(lambda (def) `(primer+ ,@def)) args)
+    (mapcar #'(<span style="font-weight: bold;">lambda</span> (def) `(primer ,@def)) args)
     (use-package-process-keywords name rest state)))
 
-  (add-to-list 'use-package-keywords :primer+ t)
+  (add-to-list 'use-package-keywords <span style="font-weight: bold;">:primer</span> t)
 
-  ;;;###autoload
-  (defalias 'use-package-normalize/:primer++ 'use-package-normalize-forms)
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defalias</span> '<span style="font-weight: bold;">use-package-normalize/:primed</span> 'use-package-normalize-forms)
 
-  ;;;###autoload
-  (defun use-package-handler/:primer++ (name keyword args rest state)
-    "Generate primer++ with NAME for `:primer++' KEYWORD.
-  ARGS, REST, and STATE are prepared by `use-package-normalize/:primer++'."
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">use-package-handler/:primed</span> (name keyword args rest state)
+    <span style="font-style: italic;">"Generate primed with NAME for `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">:primed</span><span style="font-style: italic;">' KEYWORD.</span>
+<span style="font-style: italic;">  ARGS, REST, and STATE are prepared by `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">use-package-normalize/:primed</span><span style="font-style: italic;">'."</span>
     (use-package-concat
-    (mapcar #'(lambda (def) `(primer++ ,@def)) args)
+    (mapcar #'(<span style="font-weight: bold;">lambda</span> (def) `(primed ,@def)) args)
     (use-package-process-keywords name rest state)))
 
-  (add-to-list 'use-package-keywords :primer++ t))
+  (add-to-list 'use-package-keywords <span style="font-weight: bold;">:primed</span> t)
 
-(provide 'prime)
-;;; prime.el ends here
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defalias</span> '<span style="font-weight: bold;">use-package-normalize/:primer+</span> 'use-package-normalize-forms)
+
+  <span style="font-weight: bold; font-style: italic;">;;;</span><span style="font-weight: bold; font-style: italic;">###autoload</span>
+  (<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">use-package-handler/:primer+</span> (name keyword args rest state)
+    <span style="font-style: italic;">"Generate primer+ with NAME for `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">:primer+</span><span style="font-style: italic;">' KEYWORD.</span>
+<span style="font-style: italic;">  ARGS, REST, and STATE are prepared by `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">use-package-normalize/:primer+</span><span style="font-style: italic;">'."</span>
+    (use-package-concat
+    (mapcar #'(<span style="font-weight: bold;">lambda</span> (def) `(primer+ ,@def)) args)
+    (use-package-process-keywords name rest state)))
+
+  (add-to-list 'use-package-keywords <span style="font-weight: bold;">:primer+</span> t))
+
+(<span style="font-weight: bold;">provide</span> '<span style="font-weight: bold; text-decoration: underline;">prime</span>)
+<span style="font-weight: bold; font-style: italic;">;;; </span><span style="font-weight: bold; font-style: italic;">prime.el ends here</span>
 </code></pre>
 </div>
 </div>
@@ -202,7 +203,7 @@
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-11-14 Mon 10:26</p>
+<p class="date">Created: 2023-09-04 Mon 12:28</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
