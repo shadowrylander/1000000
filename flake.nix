@@ -33,7 +33,7 @@
     "Create a nested hydra / deino of frequently accessed functions and macros!";
   inputs = rec {
     bundle = {
-      url = "git+https://github.com/sylvorg/bundle.git";
+      url = "https://github.com/sylvorg/bundle.git";
       type = "git";
       submodules = true;
     };
